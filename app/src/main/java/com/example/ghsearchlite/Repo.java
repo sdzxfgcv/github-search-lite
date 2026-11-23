@@ -8,7 +8,10 @@ class Repo {
     int stars;
     int forks;
     String updatedAt;
-    String platforms = "";
+    String latestRelease = "";
+    String latestReleaseDate = "";
+    String topics = "";
+    String owner = "";
 
     Repo(String fullName, String description, String htmlUrl, String language,
          int stars, int forks, String updatedAt) {
