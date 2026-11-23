@@ -177,15 +177,35 @@ public class MainActivity extends Activity {
         statusText.setText("搜索中…");
         new Thread(() -> {
             try {
-                List<Repo> found = GitHubApi.search(
-                        keywordEdit.getText().toString(), language, minStars, days, sort, token);
-                final List<Repo> finalList = GitHubApi.filterByPlatform(found, platform, token);
+                List<Repo> finalList = new ArrayList<>();
+                int pagesScanned = 0;
+                for (int page = 1; page <= 3; page++) {
+                    List<Repo> found = GitHubApi.search(
+                            keywordEdit.getText().toString(), language, minStars, days,
+                            sort, token, page);
+                    pagesScanned = page;
+                    List<Repo> filtered = GitHubApi.filterByPlatform(found, platform, token);
+                    if (!filtered.isEmpty()) {
+                        finalList = filtered;
+                        break;
+                    }
+                    if (found.size() < 20) break;
+                }
+                final List<Repo> resultFinal = finalList;
+                final int pagesFinal = pagesScanned;
                 runOnUiThread(() -> {
                     results.clear();
-                    results.addAll(finalList);
+                    results.addAll(resultFinal);
                     adapter.notifyDataSetChanged();
-                    statusText.setText("找到 " + results.size() + " 个仓库"
-                            + ("全部".equals(platform) ? "" : "（平台：" + platform + "）"));
+                    if (!resultFinal.isEmpty()) {
+                        statusText.setText("找到 " + resultFinal.size() + " 个仓库（扫描 " + pagesFinal + " 页）");
+                    } else if ("全部".equals(platform)) {
+                        statusText.setText("没有找到匹配的仓库");
+                    } else {
+                        statusText.setText("前 " + pagesFinal + " 页共 " + (pagesFinal * 20)
+                                + " 个仓库的最新稳定版都没有 " + platform
+                                + " 资产。试试更具体的关键词，或把平台切到「全部」。");
+                    }
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> statusText.setText("错误：" + e.getMessage()));
