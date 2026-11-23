@@ -2,7 +2,7 @@ name: Build Lite APK
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, komi-api]
   workflow_dispatch:
 
 permissions:
@@ -41,7 +41,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-search-lite-apk
+          name: komi-lite-apk
           path: ${{ steps.apk.outputs.path }}
           if-no-files-found: error
 
@@ -51,8 +51,8 @@ jobs:
           APK_PATH: ${{ steps.apk.outputs.path }}
         shell: bash
         run: |
-          gh release create v1.0.1 "$APK_PATH" \
-            --title "v1.0.1 · GitHub 搜索 Lite" \
-            --notes "修复：平台过滤为空时自动翻页最多 3 页；空结果给出明确提示。" \
+          gh release create komi-v0.1 "$APK_PATH" \
+            --title "Komi Lite v0.1（komi-api 分支）" \
+            --notes "用 Komi 后端 API 的缩小版：发现 / 搜索 / 仓库详情 / releases 产物，零第三方依赖。" \
             --target "$GITHUB_SHA" || \
-          gh release upload v1.0.1 "$APK_PATH" --clobber
+          gh release upload komi-v0.1 "$APK_PATH" --clobber
