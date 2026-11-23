@@ -51,8 +51,8 @@ jobs:
           APK_PATH: ${{ steps.apk.outputs.path }}
         shell: bash
         run: |
-          gh release create v1.0.0 "$APK_PATH" \
-            --title "v1.0.0 · GitHub 搜索 Lite" \
-            --notes "零依赖原生 Android：GitHub 仓库搜索 + 按平台过滤可安装应用（Android/Windows/macOS/Linux/iOS）+ 一键复制仓库网址。" \
+          gh release create v1.0.1 "$APK_PATH" \
+            --title "v1.0.1 · GitHub 搜索 Lite" \
+            --notes "修复：平台过滤为空时自动翻页最多 3 页；空结果给出明确提示。" \
             --target "$GITHUB_SHA" || \
-          gh release upload v1.0.0 "$APK_PATH" --clobber
+          gh release upload v1.0.1 "$APK_PATH" --clobber
