@@ -71,7 +71,7 @@ class GitHubApi {
     }
 
     static List<Repo> search(String keyword, String language, int minStars, int days,
-                             String sort, String token) throws Exception {
+                             String sort, String token, int page) throws Exception {
         StringBuilder q = new StringBuilder();
         if (keyword != null && !keyword.trim().isEmpty()) q.append(keyword.trim());
         if (!language.isEmpty()) {
@@ -95,7 +95,7 @@ class GitHubApi {
         String sortParam = "best".equals(sort) ? "" : "&sort=" + sort + "&order=desc";
         String url = "https://api.github.com/search/repositories?q="
                 + URLEncoder.encode(q.toString(), "UTF-8")
-                + sortParam + "&per_page=20";
+                + sortParam + "&per_page=20&page=" + page;
         String body = request(url, token);
         JSONObject root = new JSONObject(body);
         JSONArray items = root.getJSONArray("items");
