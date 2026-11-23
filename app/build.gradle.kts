@@ -7,16 +7,26 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.ghsearchlite"
+        applicationId = "com.example.komilite"
         minSdk = 21
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1-komi"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("ghsearch.jks")
+            storePassword = "ghsearch2026"
+            keyAlias = "ghsearch"
+            keyPassword = "ghsearch2026"
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
